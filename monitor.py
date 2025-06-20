@@ -1,7 +1,6 @@
 import requests
 import os
 import time
-import random
 from datetime import datetime
 from dotenv import load_dotenv
 
@@ -15,15 +14,6 @@ URLS = [
 DISCORD_WEBHOOK = os.getenv("DISCORD_WEBHOOK")
 LOG_FILE = "uptime_log.csv"
 STATUS_CACHE = "status_cache.txt"
-
-# === Chill Quotes ===
-CHILL_QUOTES = [
-    "Take a deep breath, it’ll be back soon.",
-    "Maybe it’s a sign to take a walk.",
-    "Time to vibe with the silence.",
-    "The lo-fi gods are just on a break.",
-    "No beats? Make your own rhythm today."
-]
 
 # === Functions ===
 def send_alert(message):
@@ -88,8 +78,7 @@ if __name__ == "__main__":
             if is_up:
                 send_alert(f"✅ Stream is BACK ONLINE at {now}: {url}")
             else:
-                quote = random.choice(CHILL_QUOTES)
-                send_alert(f"🔴 Stream is DOWN at {now}: {url}\n💬 {quote}")
+                send_alert(f"🔴 Stream is DOWN at {now}: {url}")
 
         print(f"[{now}] {url} is {status_text}")
 
