@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>🎧 Lo-Fi Monitor Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background-color: #121212;
+      color: #e0e0e0;
+      font-family: 'Segoe UI', sans-serif;
+      padding: 2rem;
+    }
+    h1 { color: #f9a826; }
+    .stats { margin: 1rem 0; font-size: 1.1rem; }
+    .up { color: #00e676; }
+    .down { color: #ff1744; }
+    table { width: 100%; margin-top: 1rem; border-collapse: collapse; }
+    th, td { padding: 0.6rem; border-bottom: 1px solid #444; }
+    form { margin-bottom: 1rem; }
+    button {
+      padding: 0.6rem 1.2rem;
+      background: #1e1e1e;
+      color: #fff;
+      border: 1px solid #555;
+      cursor: pointer;
+    }
+    button:hover { background: #2e2e2e; }
+    .thumbnail { width: 100px; height: auto; }
+  </style>
+</head>
+<body>
+  <h1>🔊 Lo-Fi Stream Monitor</h1>
+
+  <form action="/check" method="post">
+    <button type="submit">🔁 Manual Check</button>
+  </form>
+
+  <div class="stats">
+    ✅ Up: {{ up }} | ❌ Down: {{ down }}
+  </div>
+
+  <canvas id="uptimeChart" width="800" height="300"></canvas>
+
+  <table>
+    <tr><th>Time</th><th>URL</th><th>Status</th><th>Thumbnail</th></tr>
+    {% for row in logs %}
+    <tr>
+      <td>{{ row.time }}</td>
+      <td><a href="{{ row.url }}" target="_blank">{{ row.url }}</a></td>
+      <td class="{{ row.status | lower }}">{{ row.status }}</td>
+      <td>
+        <img class="thumbnail" src="https://img.youtube.com/vi/{{ row.url.split('=')[-1] }}/default.jpg" />
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <script>
+    const data = {{ chart_json | safe }};
+    const ctx = document.getElementById('uptimeChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: data.labels,
+        datasets: [{
+          label: 'Uptime (1=Up, 0=Down)',
+          data: data.data,
+          borderColor: '#f9a826',
+          backgroundColor: 'rgba(249, 168, 38, 0.2)',
+          fill: true,
+          tension: 0.4,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: true } },
+        scales: {
+          y: { min: 0, max: 1, ticks: { stepSize: 1 } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
