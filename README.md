@@ -29,3 +29,19 @@ python -m venv .venv
 source .venv/Scripts/activate  # or 'source .venv/bin/activate' on Mac/Linux
 pip install -r requirements.txt
 python run_this.py
+```
+🌐 Dashboard
+Visit: http://localhost:8000
+
+📸 Preview
+
+📣 Discord Alerts
+Set your Discord webhook in .env:
+DISCORD_WEBHOOK=https://discord.com/api/webhooks/...
+
+
+📊 Logs
+All uptime is stored in uptime_log.csv — use it for Grafana dashboards later.
+
+🙌 Built by Jishnu Aravind
+A fun personal DevOps project mixing creativity and monitoring.
